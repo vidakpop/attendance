@@ -40,13 +40,14 @@ INSTALLED_APPS = [
     'attendance',  # Custom app for attendance management
     'rest_framework',  # Django REST Framework for API development
     'corsheaders',  # For handling CORS
-    
+
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # CORS middleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -74,6 +75,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+CORS_ALLOW_ALL_ORIGINS =True
+
+REST_FRAMEWORK ={
+    ''
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
