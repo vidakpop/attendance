@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'attendance',  # Custom app for attendance management
+    'rest_framework',  # Django REST Framework for API development
+    'corsheaders',  # For handling CORS
+    
+
 ]
 
 MIDDLEWARE = [
