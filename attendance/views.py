@@ -16,3 +16,21 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class=AttendanceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class AttendanceViewSet(viewsets.ModelViewSet):
+    queryset = Attendance.objects.all()
+    serializer_class = AttendanceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True,methods=['post'])
+    def sign_in(self,request,pk=None):
+        attendance=self.get_object()
+        attendance.sign__in_time = timezone.now()
+        attendance.save()
+        return Response({'status':'signed in'})
+    
+    @action(detail=True,methods=['post'])
+    def sign_out(self,request,pk=None):
+        attendance = self.get_object()
+        attendance.sign_out_time = timezone.now()
+        attendance.save()
+        return Response({'status':'signed out'})
