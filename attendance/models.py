@@ -19,4 +19,13 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.name} ({self.student_id})"
 
-    
+class Attendance(models.Model):
+    student = models.FGoreignKey(Student,on_delete=models.CASCADE)
+    date=models.DateField(auto_now_add=True)
+    sign_in_time = models.DateTimeField(null=True, blank=True)
+    sign_out_time = models.DateTimeField(null=True, blank=True)
+    marked_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        unique_together = ('student', 'date')
+
