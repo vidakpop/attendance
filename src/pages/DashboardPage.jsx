@@ -7,6 +7,10 @@ const DashboardPage = () => {
   const [selectedClassId, setSelectedClassId] = useState(null)
   const [students, setStudents] = useState([])
 
+  useEffect(() => {
+    API.get('classes/').then(res => setClasses(res.data))
+  }, [])
+
   
 
   return (
