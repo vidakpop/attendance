@@ -15,7 +15,7 @@ const DashboardPage = () => {
     API.get(`students/?school_clas=${classId}`).then(res => setStudents(res.data))
  }
    const signInStudent = async (studentId)=> {
-    cosnt today = new Date().toISOString().slice(0,10)
+    const today = new Date().toISOString().slice(0,10)
     let attendance;
 
     // Try to get todays attendance
