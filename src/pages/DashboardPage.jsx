@@ -21,7 +21,7 @@ const DashboardPage = () => {
     // Try to get todays attendance
     try {
       const res = await API.get(`attendance/?student=${studentId}&date=${today}`)
-      attendance = res.data[]
+      attendance = res.data[0];
     }catch (err) {}
 
     if (!attendance) {
@@ -50,7 +50,13 @@ const DashboardPage = () => {
 
   return (
     <div className='p-6'>
-      <h1>Attendance Dashboard</h1>
+      <h1 className='text-3xl font-bold  bold mb-4'>Attendance Dashboard</h1>
+
+      <div className='mb-4'>
+        <label>Select Class:</label>
+        <select onChange={(e) = loadStudents(e.target.value)} className='border ml-2 p-1'></select>
+
+      </div>
     </div>
   )
 }
