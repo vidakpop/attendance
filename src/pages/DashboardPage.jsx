@@ -50,6 +50,7 @@ const DashboardPage = () => {
 
   return (
     <div className='p-6'>
+      <h1>Attendance Dashboard</h1>
     </div>
   )
 }
