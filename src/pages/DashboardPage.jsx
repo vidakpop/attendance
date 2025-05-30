@@ -13,8 +13,29 @@ const DashboardPage = () => {
   const loadStudents = (classId) => {
     setSelectedClassId(classId)
     API.get(`students/?school_clas=${classId}`).then(res => setStudents(res.data))
-}
+ }
+   const signInStudent = async (studentId)=> {
+    cosnt today = new Date().toISOString().slice(0,10)
+    let attendance;
 
+    // Try to get todays attendance
+    try {
+      const res = await API.get(`attendance/?student=${studentId}&date=${today}`)
+      attendance = res.data[]
+    }catch (err) {}
+
+    if (!attendance) {
+      const res = await API.post('attendance/',{
+        student: studentId,
+        date: today
+      })
+      attendance = res.data
+    }
+    await API.post(`attendance/${attendance.id}/sign_in/`)
+    alert('Student signed in successfully')
+   }
+
+ 
   
 
   return (
