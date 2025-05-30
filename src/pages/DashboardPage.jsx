@@ -35,6 +35,16 @@ const DashboardPage = () => {
     alert('Student signed in successfully')
    }
 
+   const signOutStudent = async (studentId) => {
+    const today = new Date().toISOString().slice(0,10)
+    const res = await API.get(`attendance/?students=${studentId}&date=${today}`)
+    const attendance = res.data[0]
+    if (attendance){
+      await API.post(`attendance/${attendance.id}/sign_out/`)
+      alert('Student signed out successfully')
+    }
+   }
+
  
   
 
