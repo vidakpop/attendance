@@ -10,6 +10,10 @@ const DashboardPage = () => {
   useEffect(() => {
     API.get('classes/').then(res => setClasses(res.data))
   }, [])
+  const loadStudents = (classId) => {
+    setSelectedClassId(classId)
+    API.get(`students/?school_clas=${classId}`).then(res => setStudents(res.data))
+}
 
   
 
