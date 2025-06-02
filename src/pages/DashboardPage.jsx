@@ -58,8 +58,8 @@ const DashboardPage = () => {
 
       <div className='mb-4'>
         <label>Select Class:</label>
-        <select onChange={(e) = loadStudents(e.target.value)} className='border ml-2 p-1'>
-          <option value="">Select</option>
+        <select onChange={(e) => loadStudents(e.target.value)} className='border ml-2 p-1'>
+          <option >Select</option>
           {classes.map(cls => (
             <option key={cls.id} value={cls.id}>{cls.name}</option>
           ))}
@@ -70,8 +70,20 @@ const DashboardPage = () => {
       {students.length > 0 && (
         <div>
           <h2 className='text-xl font-semibold mb-2'>
-             
+             Students
           </h2>
+          <ul>
+            {students.map(student => (
+              <li key={student.id} className='mb-2 flex justify-between items-center bg-gray-100 p-2 rounded'>
+                 <span>{student.name}</span>
+                 <div className="space-x-2">
+                  <button onClick={() => signInStudent(student.id)} className="bg-green-500 text-white px-2 py-1 rounded">Sign In</button>
+                  <button onClick={() => signOutStudent(student.id)} className="bg-red-500 text-white px-2 py-1 rounded">Sign Out</button>
+                </div>
+              </li>
+            ))}
+
+          </ul>
         </div>
       )}
     </div>
