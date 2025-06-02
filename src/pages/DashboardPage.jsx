@@ -11,6 +11,10 @@ const DashboardPage = () => {
     API.get('classes/').then(res => setClasses(res.data))
   }, [])
   const loadStudents = (classId) => {
+    if (!classId){
+      setStudents([])
+      return;
+    }
     setSelectedClassId(classId)
     API.get(`students/?school_clas=${classId}`).then(res => setStudents(res.data))
  }
@@ -55,13 +59,21 @@ const DashboardPage = () => {
       <div className='mb-4'>
         <label>Select Class:</label>
         <select onChange={(e) = loadStudents(e.target.value)} className='border ml-2 p-1'>
-          <option >Select</option>
+          <option value="">Select</option>
           {classes.map(cls => (
             <option key={cls.id} value={cls.id}>{cls.name}</option>
           ))}
         </select>
 
       </div>
+
+      {students.length > 0 && (
+        <div>
+          <h2 className='text-xl font-semibold mb-2'>
+             
+          </h2>
+        </div>
+      )}
     </div>
   )
 }
