@@ -54,7 +54,12 @@ const DashboardPage = () => {
 
       <div className='mb-4'>
         <label>Select Class:</label>
-        <select onChange={(e) = loadStudents(e.target.value)} className='border ml-2 p-1'></select>
+        <select onChange={(e) = loadStudents(e.target.value)} className='border ml-2 p-1'>
+          <option >Select</option>
+          {classes.map(cls => (
+            <option key={cls.id} value={cls.id}>{cls.name}</option>
+          ))}
+        </select>
 
       </div>
     </div>
