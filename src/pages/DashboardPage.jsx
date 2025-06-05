@@ -21,7 +21,9 @@ const DashboardPage = () => {
     }
     setSelectedClassId(classId)
     API.get(`students/?school_class=${classId}`)
-      .then(res => setStudents(res.data))
+      .then(res => {console.log("STUDENTS RESPONSEE",res.data)
+        setStudents(res.data)
+      })
       .catch(err => console.error(err))
   }
 
