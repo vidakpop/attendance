@@ -34,7 +34,9 @@ const DashboardPage = () => {
     try {
       const res = await API.get(`attendance/?student=${studentId}&date=${today}`)
       attendance = res.data[0]
-    } catch (err) {}
+    } catch (err) {
+    console.error("Error fetching attendance:", err.response || err)
+  }
 
     if (!attendance) {
       const res = await API.post('attendance/', {
