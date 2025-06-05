@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import API from '../utils/api'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
+import { toast } from 'react-toastify';
 
 const DashboardPage = () => {
   const [classes, setClasses] = useState([])
@@ -33,26 +34,31 @@ const DashboardPage = () => {
     }
   }
 
-  // Sign In student
-  const signInStudent = async (studentId) => {
-    const today = new Date().toISOString().slice(0, 10)
+ const signInStudent = async (studentId) => {
+  const today = new Date().toISOString().slice(0, 10);
 
-    try {
-      const res = await API.get(`attendance/?student=${studentId}&date=${today}`)
-      let attendance = res.data[0]
+  try {
+    const res = await API.get(`attendance/?student=${studentId}&date=${today}`);
+    let attendance = res.data.length > 0 ? res.data[0] : null;
 
-      if (!attendance) {
-        const createRes = await API.post('attendance/', { student: studentId, date: today })
-        attendance = createRes.data
-      }
-
-      await API.post(`attendance/${attendance.id}/sign_in/`)
-      alert('✅ Student signed in successfully')
-    } catch (err) {
-      console.error('Sign in error:', err)
-      alert('❌ Failed to sign in student')
+    if (!attendance) {
+      const createRes = await API.post('attendance/', { student: studentId, date: today });
+      attendance = createRes.data;
     }
+
+    // Optional: check if already signed in
+    if (attendance.sign_in_time) {
+      alert('⚠️ Student already signed in.');
+      return;
+    }
+
+    await API.post(`attendance/${attendance.id}/sign_in/`);
+    alert('✅ Student signed in successfully');
+  } catch (err) {
+    console.error('Sign in error:', err.response?.data || err.message || err);
+    alert('❌ Failed to sign in student');
   }
+};
 
   // Sign Out student
   const signOutStudent = async (studentId) => {
