@@ -12,7 +12,7 @@ class Class(models.Model):
         return self.name
     
     class Meta:
-        verboden_name = '   Classes'
+        verbose_name_plural = 'Classes'
     
 class Student(models.Model):
     name = models.CharField(max_length=100)
