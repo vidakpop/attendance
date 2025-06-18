@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import API from '../utils/api'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const DashboardPage = () => {
   const [classes, setClasses] = useState([])

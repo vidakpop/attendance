@@ -1,6 +1,8 @@
 import {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+//import {toast} from 'react-toastify'
+import { toast } from 'react-hot-toast';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('')
@@ -17,9 +19,10 @@ const LoginPage = () => {
         localStorage.setItem('access', res.data.access)
         localStorage.setItem('refresh', res.data.refresh)
         navigate('/dashboard')
+        toast.success('Login successful!')
       }
       catch (error) {
-        alert('Login failed. Please check your credentials.')
+        toast.error('Login failed. Please check your credentials.')
       }
     }
 
