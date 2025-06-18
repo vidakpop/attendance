@@ -48,15 +48,15 @@ const DashboardPage = () => {
 
     // Optional: check if already signed in
     if (attendance.sign_in_time) {
-      alert('⚠️ Student already signed in.');
+      toast.success('⚠️ Student already signed in.');
       return;
     }
 
     await API.post(`attendance/${attendance.id}/sign_in/`);
-    alert('✅ Student signed in successfully');
+    toast.success('✅ Student signed in successfully');
   } catch (err) {
     console.error('Sign in error:', err.response?.data || err.message || err);
-    alert('❌ Failed to sign in student');
+    toast.error('❌ Failed to sign in student');
   }
 };
 
@@ -69,15 +69,15 @@ const DashboardPage = () => {
       const attendance = res.data[0]
 
       if (!attendance) {
-        alert('⚠️ Student has not signed in today.')
+        toast.error('⚠️ Student has not signed in today.')
         return
       }
 
       await API.post(`attendance/${attendance.id}/sign_out/`)
-      alert('📤 Student signed out successfully')
+      toast.success('📤 Student signed out successfully')
     } catch (err) {
       console.error('Sign out error:', err)
-      alert('❌ Failed to sign out student')
+      toast.error('❌ Failed to sign out student')
     }
   }
 
