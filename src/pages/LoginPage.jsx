@@ -19,7 +19,7 @@ const LoginPage = () => {
         localStorage.setItem('access', res.data.access)
         localStorage.setItem('refresh', res.data.refresh)
         navigate('/dashboard')
-        toast.success('Login successful!')
+        toast.success(`Login successful! ${username}`)
       }
       catch (error) {
         toast.error('Login failed. Please check your credentials.')
