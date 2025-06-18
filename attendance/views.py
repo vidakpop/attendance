@@ -7,9 +7,20 @@ from .serializer import ClassSerializer,StudentSerializer,AttendanceSerializer
 from django.utils import timezone
 
 class ClassViewSet(viewsets.ModelViewSet):
+
     queryset = Class.objects.all()
     serializer_class =ClassSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user=self.request.user
+
+        if user.is_teacher:
+            return Class.objects.filter(teacher=user)
+        else:
+            return Class.objects.none()
+        
+
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -24,7 +35,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     @action(detail=True,methods=['post'])
     def sign_in(self,request,pk=None):
         attendance=self.get_object()
-        attendance.sign__in_time = timezone.now()
+        attendance.sign_in_time = timezone.now()
         attendance.save()
         return Response({'status':'signed in'})
     
