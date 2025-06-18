@@ -27,6 +27,17 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class=StudentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_teacher:
+            teacher_classes = Class.objects.filter(teacher=user)
+            return Student.objects.filter(school_class__in=teacher_classes).distinct()
+        else:
+            return Student.objects.none()
+ 
+        
+
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
