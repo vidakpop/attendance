@@ -26,6 +26,9 @@ class Attendance(models.Model):
     sign_out_time = models.DateTimeField(null=True, blank=True)
     marked_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return f"{self.student.name} - {self.date}"
+
     class Meta:
         unique_together = ('student', 'date')
 
