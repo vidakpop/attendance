@@ -64,7 +64,12 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     def sign_in(self,request,pk=None):
         attendance=self.get_object()
         # Check if this attendance record already has a sign-in time
-        if attendance.sign_in_time = timezone.now()
+        if attendance.sign_in_time is not None:
+            return Response({'status':'already signed in'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        #update the sign in tiem for a student not signed in
+        attendance.sign_in_time = timezone.now()
+        attendance.marked_by = request.user
         attendance.save()
         return Response({'status':'signed in'})
     
