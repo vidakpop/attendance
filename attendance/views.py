@@ -117,6 +117,11 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     @action(detail=True,methods=['post'])
     def sign_out(self,request,pk=None):
         attendance = self.get_object()
+
+        #Check if already signed_out
+        if attendance.sign_out_time is not None:
+            return Response({'status':'already signed out'}, status=status.HTTP_400_BAD_REQUEST)
+        
         attendance.sign_out_time = timezone.now()
         attendance.save()
         return Response({'status':'signed out'})
