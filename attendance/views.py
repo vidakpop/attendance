@@ -91,10 +91,10 @@ class AttendanceViewSet(viewsets.ModelViewSet):
                 attendance,created =Attendance.objects.get_or_create(
                     student=student,
                     date=today,
-                    defaults=(
-                    'sign_in_time' = timezone.now(),
-                    'marked_by' = request.user,
-                    )
+                    defaults={
+                    'sign_in_time' : timezone.now(),
+                    'marked_by' : request.user,
+                    }
                 )
                 if not created and attendance.sign_in_time is None:
                     #record exists but no sign in time
