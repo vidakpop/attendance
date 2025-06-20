@@ -108,6 +108,10 @@ class AttendanceViewSet(viewsets.ModelViewSet):
                 errors.append(f'Student ID {student_id}')
             except Exception as e:
                 errors.append(f'Error processing student ID {student_id}: {str(e)}')
+        return Response({
+            'status': f'Signed in {records_created} students',
+            'errors':errors if errors else None
+        })        
 
     
     @action(detail=True,methods=['post'])
