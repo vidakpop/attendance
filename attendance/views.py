@@ -73,6 +73,43 @@ class AttendanceViewSet(viewsets.ModelViewSet):
         attendance.save()
         return Response({'status':'signed in'})
     
+    @action(detail=False,methods=['post'])
+    def bulk_sign_in(self,request):
+        #sign in multiple students at once
+        student_ids = request.data.get('student_ids',[])
+        class_id = request.data.get('class_id')
+
+        if not student_ids:
+            today= timezone.now().date()
+            records_created = 0
+            errors= []
+
+        for student_id in student_ids:
+            try:
+                student=Student.objects.get(id=student_id)
+                # Create or get attendance record for today
+                attendance,created =Attendance.objects.get_or_create(
+                    student=student,
+                    date=today,
+                    defaults=(
+                    'sign_in_time' = timezone.now(),
+                    'marked_by' = request.user,
+                    )
+                )
+                if not created and attendance.sign_in_time is None:
+                    #record exists but no sign in time
+                    attendance.sign_in_time = timezone.now()
+                    attendance.marked_by= request.user
+                    attendance.save()
+                    records_created += 1
+                elif created:
+                    records_created += 1 
+            except Student.DoesNotExist:
+                errors.append(f'Student ID {student_id}')
+            except Exception as e:
+                errors.append(f'Error processing student ID {student_id}: {str(e)}')
+
+    
     @action(detail=True,methods=['post'])
     def sign_out(self,request,pk=None):
         attendance = self.get_object()
