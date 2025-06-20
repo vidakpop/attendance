@@ -51,10 +51,20 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     serializer_class = AttendanceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        user =  self.request.user
+        # Teacher can see attendance for students in their classes
+        if user.is_teacher:
+            return Attendance.objects.filter(school_class__teacher=user)
+        else:
+            return Attendance.objects.none()
+    
+
     @action(detail=True,methods=['post'])
     def sign_in(self,request,pk=None):
         attendance=self.get_object()
-        attendance.sign_in_time = timezone.now()
+        # Check if this attendance record already has a sign-in time
+        if attendance.sign_in_time = timezone.now()
         attendance.save()
         return Response({'status':'signed in'})
     
