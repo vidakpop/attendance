@@ -139,8 +139,9 @@ const DashboardPage = () => {
         <div className="bg-white rounded-lg shadow p-4 mt-6">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">🟢 Sign In Student</h2>
           <ul className="space-y-3">
+            <AnimatePresence>
             {students.filter(s => !signedInStudents.some(si => si.id === s.id)).map(student => (
-              <li
+              <motion.li
                 key={student.id}
                 className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm"
               >
@@ -154,15 +155,17 @@ const DashboardPage = () => {
                   </button>
                 
                 </div>
-              </li>
+              </motion.li>
             ))}
+            </AnimatePresence>
           </ul>
         </div>
         <div className='bg-white rounded-lg shadow p-4 mt-6'>
           <h2 className='text-xl font-semibold text-gray-700 mb-4'>🔴Sign Out Student</h2>
           <ul className='space-y-3'>
+            <AnimatePresence>
             {signedInStudents.map(student => (
-              <li key={student.id} className='flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm'>
+              <motion.li key={student.id} className='flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm'>
                 <span className='font-medium text-gray-700'>{student.name} </span>
 
                 <div className='space-x-2'>
@@ -174,9 +177,10 @@ const DashboardPage = () => {
                   </button>
 
                 </div>
-              </li>
+              </motion.li>
             ) 
             )}
+            </AnimatePresence>
           </ul>
 
         </div>
