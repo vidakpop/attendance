@@ -8,7 +8,7 @@ const DashboardPage = () => {
   const [selectedClassId, setSelectedClassId] = useState(null)
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(false)
-  const [signInStudents, setSignInStudents] = useState([])
+  const [signedInStudents, setSignedInStudents] = useState([])
 
   // Fetch classes on mount
   useEffect(() => {
@@ -50,7 +50,7 @@ const DashboardPage = () => {
         console.error(`Error checking sign-in status for student ${student.id}:`, err)
         
       }
-      setSignInStudents(signedIn);
+      setSignedInStudents(signedIn);
     }
   }
 
@@ -146,7 +146,7 @@ const DashboardPage = () => {
           </ul>
         </div>
         <div className='bg-white rounded-lg shadow p-4 mt-6'>
-          <h2 className='text-xl font-semibold text-gray-700 mb-4'>Sign Out Student</h2>
+          <h2 className='text-xl font-semibold text-gray-700 mb-4'>🔴Sign Out Student</h2>
           <ul className='space-y-3'>
             {signedInStudents.map(student => (
               <li key={student.id} className='flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm'>
