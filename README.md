@@ -79,7 +79,7 @@ Check the `package.json` for exact requirements.
 #### 3. Run the Development Server
 
 ```bash
-npm start
+npm run dev
 ```
 
 #### 4. Access the App
