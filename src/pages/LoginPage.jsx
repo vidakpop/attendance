@@ -54,7 +54,7 @@ const LoginPage = () => {
                     {/* Decorative header */}
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-center">
                         <FaChalkboardTeacher className="w-16 h-16 mx-auto text-white" />
-                        <h1 className="text-3xl font-bold text-white mt-4">SchoolSync</h1>
+                        <h1 className="text-3xl font-bold text-white mt-4">Cyberjiutsu</h1>
                         <p className="text-white/80 mt-2">Teacher Attendance Portal</p>
                     </div>
 
@@ -109,7 +109,7 @@ const LoginPage = () => {
                 </div>
 
                 <div className="mt-6 text-center text-white/80 text-sm">
-                    © {new Date().getFullYear()} SchoolSync Attendance System
+                    © {new Date().getFullYear()} Cyberjiutsu Attendance System
                 </div>
             </div>
 
