@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import API from '../utils/api'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
 import { toast } from 'react-hot-toast';
+import {motion, AnimatePresence} from 'framer-motion'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const DashboardPage = () => {
 
   // Fetch classes on mount
   useEffect(() => {
+    {/* Check if user is authenticated 
     const checkAuth = async () => {
       try {
         await API.get('auth/user')
@@ -22,7 +24,7 @@ const DashboardPage = () => {
         navigate('/')
       }
     }
-    checkAuth()
+    checkAuth()*/}
     API.get('classes/')
       .then(res => setClasses(res.data))
       .catch(err => console.error('Error fetching classes:', err))
