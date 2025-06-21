@@ -46,24 +46,23 @@ const DashboardPage = () => {
       setLoading(false)
     }
   }
-  const checkSignInStatus = async (studentList) => {
-    const today = new Date().toISOString().slice(0,10)
-    const signedIn = []
-
-    for (let student of studentList) {
-      try {
-        const res = await API.get(`attendance/?student=${student.id}&date=${today}`)
-        if (res.data.length > 0 && res.data[0].sign_in_time){
-          signedIn.push({ ...student, attendanceId: res.data[0].id})
-        } 
+    const checkSignInStatus = async (studentList) => {
+    const today = new Date().toISOString().slice(0, 10);
+    const signedIn = await Promise.all(
+      studentList.map(async student => {
+        try {
+          const res = await API.get(`attendance/?student=${student.id}&date=${today}`);
+          if (res.data.length > 0 && res.data[0].sign_in_time) {
+            return { ...student, attendanceId: res.data[0].id };
+          }
+        } catch (err) {
+          console.error(`Check sign-in failed for student ${student.id}:`, err);
         }
-        catch (err) {
-        console.error(`Error checking sign-in status for student ${student.id}:`, err)
-        
-      }
-      setSignedInStudents(signedIn);
-    }
-  }
+        return null;
+      })
+    );
+    setSignedInStudents(signedIn.filter(Boolean));
+  };
 
  const signInStudent = async (studentId) => {
   const today = new Date().toISOString().slice(0, 10);
