@@ -84,6 +84,7 @@ const DashboardPage = () => {
 
     await API.post(`attendance/${attendance.id}/sign_in/`);
     toast.success('✅ Student signed in successfully');
+    loadStudents(selectedClassId); // Refresh students list
   } catch (err) {
     console.error('Sign in error:', err.response?.data || err.message || err);
     toast.error('❌ Failed to sign in student');
