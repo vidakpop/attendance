@@ -145,7 +145,7 @@ const DashboardPage = () => {
                 key={student.id}
                 className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm"
               >
-                <span className="font-medium text-gray-700">{student.name}</span>
+                <span className="font-medium text-gray-700">{student.name} {student.student_id}</span>
                 <div className="space-x-2">
                   <button
                     onClick={() => signInStudent(student.id)}
@@ -166,7 +166,7 @@ const DashboardPage = () => {
             <AnimatePresence>
             {signedInStudents.map(student => (
               <motion.li key={student.id} className='flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm'>
-                <span className='font-medium text-gray-700'>{student.name} </span>
+                <span className='font-medium text-gray-700'>{student.name} {student.student_id} </span>
 
                 <div className='space-x-2'>
                   <button
