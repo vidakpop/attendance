@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import API from '../utils/api'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
 import { toast } from 'react-hot-toast';
 
 const DashboardPage = () => {
+  const navigate = useNavigate()
   const [classes, setClasses] = useState([])
   const [selectedClassId, setSelectedClassId] = useState(null)
   const [students, setStudents] = useState([])
@@ -12,6 +14,15 @@ const DashboardPage = () => {
 
   // Fetch classes on mount
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await API.get('auth/user')
+      } catch (error){
+        toast.error('❌ Please log in to access the dashboard.')
+        navigate('/')
+      }
+    }
+    checkAuth()
     API.get('classes/')
       .then(res => setClasses(res.data))
       .catch(err => console.error('Error fetching classes:', err))
@@ -150,7 +161,7 @@ const DashboardPage = () => {
           <ul className='space-y-3'>
             {signedInStudents.map(student => (
               <li key={student.id} className='flex items-center justify-between bg-gray-50 px-4 py-2 rounded shadow-sm'>
-                <span className='font-medium text-gray-700'>{student.name}</span>
+                <span className='font-medium text-gray-700'>{student.name} </span>
 
                 <div className='space-x-2'>
                   <button
