@@ -53,6 +53,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         user =  self.request.user
+        queryset = Attendance.objects.all()
         student_id = self.request.query_params.get('student')
         date = self.request.query_params.get('date')
 
