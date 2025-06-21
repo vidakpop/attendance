@@ -8,6 +8,7 @@ const DashboardPage = () => {
   const [selectedClassId, setSelectedClassId] = useState(null)
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(false)
+  const [signInStudents, setSignInStudents] = useState([])
 
   // Fetch classes on mount
   useEffect(() => {
@@ -27,10 +28,29 @@ const DashboardPage = () => {
       setLoading(true)
       const res = await API.get(`students/?school_class=${classId}`)
       setStudents(res.data)
+      checkSignInStatus(res.data)
     } catch (err) {
       console.error('Error loading students:', err)
     } finally {
       setLoading(false)
+    }
+  }
+  const checkSignInStatus = async (studentList) => {
+    const today = new Date().toISOString().slice(0,10)
+    const signedIn = []
+
+    for (let student of studentList) {
+      try {
+        const res = await API.get(`attendance/?student=${student.id}&date=${today}`)
+        if (res.data.length > 0 && res.data[0].sign_in_time){
+          signedIn.push({ ...student, attendanceId: res.data[0].id})
+        } 
+        }
+        catch (err) {
+        console.error(`Error checking sign-in status for student ${student.id}:`, err)
+        
+      }
+      setSignInStudents(signedIn);
     }
   }
 
