@@ -26,7 +26,7 @@ const DashboardPage = () => {
     API.get('classes/')
       .then(res => setClasses(res.data))
       .catch(err => console.error('Error fetching classes:', err))
-  }, [])
+  }, [navigate])
 
   // Load students in a class
   const loadStudents = async (classId) => {
