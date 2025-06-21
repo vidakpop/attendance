@@ -50,14 +50,15 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
     permission_classes = [permissions.IsAuthenticated]
-
+    '''
     def get_queryset(self):
         user =  self.request.user
         # Teacher can see attendance for students in their classes
         if user.is_teacher:
             return Attendance.objects.filter(school_class__teacher=user)
         else:
-            return Attendance.objects.none()
+            return Attendance.objects.none() 
+   '''
     
 
     @action(detail=True,methods=['post'])
@@ -77,7 +78,7 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     def bulk_sign_in(self,request):
         #sign in multiple students at once
         student_ids = request.data.get('student_ids',[])
-        class_id = request.data.get('class_id')
+       # class_id = request.data.get('class_id')
 
         if not student_ids:
             today= timezone.now().date()
