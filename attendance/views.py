@@ -50,15 +50,21 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
     permission_classes = [permissions.IsAuthenticated]
-    '''
+    
     def get_queryset(self):
         user =  self.request.user
+        student_id = self.request.query_params.get('student')
+        date = self.request.query_params.get('date')
+
+        if student_id:
+            queryset = queryset.filter(student_id=student_id)
+        if date:
+            queryset = queryset.filter(date=date)
         # Teacher can see attendance for students in their classes
         if user.is_teacher:
-            return Attendance.objects.filter(school_class__teacher=user)
-        else:
-            return Attendance.objects.none() 
-   '''
+            queryset = queryset.filter(student__school_class__teacher=user)
+        
+        return queryset
     
 
     @action(detail=True,methods=['post'])
