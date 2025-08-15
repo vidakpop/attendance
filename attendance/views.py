@@ -5,6 +5,9 @@ from rest_framework.decorators import action
 from .models import Class,Student,Attendance
 from .serializer import ClassSerializer,StudentSerializer,AttendanceSerializer
 from django.utils import timezone
+from django.http import HttpResponse
+import csv
+from datetime import datetime
 
 class ClassViewSet(viewsets.ModelViewSet):
 
@@ -66,6 +69,75 @@ class AttendanceViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(student__school_class__teacher=user)
         
         return queryset
+    @action(detail=False, methods=['get'])
+    def export(self, request):
+        user = request.user
+        queryset = self.get_queryset()
+        
+        # Get filter parameters
+        class_id = request.query_params.get('class_id')
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        
+        # Apply filters
+        if class_id:
+            queryset = queryset.filter(student__school_class_id=class_id)
+        if start_date:
+            queryset = queryset.filter(date__gte=start_date)
+        if end_date:
+            queryset = queryset.filter(date__lte=end_date)
+        
+        # Create CSV response
+        response = HttpResponse(content_type='text/csv')
+        filename = f'attendance_export_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        
+        writer = csv.writer(response)
+        # Write header
+        # Styled header row (extra spacing, capitalization, and new columns)
+        writer.writerow([
+            'ATTENDANCE EXPORT', '', '', '', '', '', '', '', ''
+        ])
+        writer.writerow([
+            'Generated On:', datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '', '', '', '', '', '', ''
+        ])
+        writer.writerow(['', '', '', '', '', '', '', '', ''])
+        writer.writerow([
+            'Student ID', 'Student Name', 'Class Name', 'Class Teacher',
+            'Date', 'Sign In Time', 'Sign Out Time', 'Duration', 'Status', 'Marked By'
+        ])
+        
+        # Write data rows
+        for attendance in queryset:
+            duration = ''
+            if attendance.sign_in_time and attendance.sign_out_time:
+                duration = attendance.sign_out_time - attendance.sign_in_time
+                duration = str(duration).split('.')[0]  # Remove microseconds
+
+            status = 'Present' if attendance.sign_in_time else 'Absent'
+            if attendance.sign_in_time and not attendance.sign_out_time:
+                status = 'Present (Not Signed Out)'
+
+            # Get marked_by username or fallback
+            marked_by = getattr(attendance.marked_by, 'username', '') if hasattr(attendance, 'marked_by') and attendance.marked_by else ''
+
+            # Get class teacher name
+            class_teacher = getattr(attendance.student.school_class.teacher, 'username', '') if hasattr(attendance.student.school_class, 'teacher') else ''
+
+            writer.writerow([
+                attendance.student.student_id,
+                attendance.student.name,
+                attendance.student.school_class.name,
+                class_teacher,
+                attendance.date,
+                attendance.sign_in_time.strftime('%H:%M:%S') if attendance.sign_in_time else '',
+                attendance.sign_out_time.strftime('%H:%M:%S') if attendance.sign_out_time else '',
+                duration,
+                status,
+                marked_by
+            ])
+        
+        return response
     
 
     @action(detail=True,methods=['post'])
