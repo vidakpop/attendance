@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import API from '../utils/api'
-import { FaSignInAlt, FaSignOutAlt, FaUserGraduate, FaChalkboardTeacher, FaSearch } from 'react-icons/fa'
+import { FaSignInAlt, FaSignOutAlt, FaUserGraduate, FaChalkboardTeacher, FaSearch,FaFileExport } from 'react-icons/fa'
 import { toast } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -152,6 +152,58 @@ const DashboardPage = () => {
     student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.student_id.toLowerCase().includes(searchTerm.toLowerCase())
   )
+  const exportAttendance = async () => {
+  if (!selectedClassId) {
+    toast('Please select a class first', {
+      icon: '⚠️',
+      style: {
+        borderRadius: '12px',
+        background: '#F59E0B',
+        color: '#fff',
+      },
+    })
+    return
+  }
+
+  try {
+    // Get date range (default to today)
+    const today = new Date().toISOString().slice(0, 10)
+    const response = await API.get('attendance/export/', {
+      params: {
+        class_id: selectedClassId,
+        start_date: today,
+        end_date: today,
+      },
+      responseType: 'blob' // Important for file downloads
+    })
+
+    // Create download link
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `attendance_${today}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+
+    toast.success('Attendance exported successfully', {
+      style: {
+        borderRadius: '12px',
+        background: '#10B981',
+        color: '#fff',
+      },
+    })
+  } catch (err) {
+    console.error('Export error:', err)
+    toast.error('Failed to export attendance', {
+      style: {
+        borderRadius: '12px',
+        background: '#EF4444',
+        color: '#fff',
+      },
+    })
+  }
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6">
@@ -181,6 +233,12 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
+        <button
+          onClick={exportAttendance}
+          className="ml-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all hover:shadow-md flex items-center"
+        >
+           <FaFileExport className="mr-2" /> Export Attendance
+        </button>
 
         {/* Class Selection */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-8">
